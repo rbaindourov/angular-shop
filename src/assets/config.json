@@ -1,5 +1,5 @@
 {
 
-    "Categories": [{"id":"1", "name":"bracelets"}],
+    "Categories": [{"id":"1", "name":"bracelets from file"}],
     "Products":[{"id":"1", "name":"bracelets"}]
 }

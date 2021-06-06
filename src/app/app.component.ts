@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Config, ConfigService } from './config';
 
 
@@ -8,16 +8,21 @@ import { Config, ConfigService } from './config';
   providers: [ ConfigService ],
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   config?: Config;
   error: any;
 
   constructor(private configService: ConfigService) {
   }
-  ngOnInt(){
+
+  ngOnInit(){
     this.configService.getConfig()
     .subscribe(
-      (data: Config) => this.config = { ...data }, // success path
+      (data: Config) => {
+        console.log("--getConfig--")
+        console.log(data)
+        this.config = { ...data }
+      }, 
       error => this.error = error // error path
     );
   }

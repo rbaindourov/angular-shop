@@ -6,8 +6,8 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
 export interface Config {
-  categories: Category[];
-  products: Product[];
+  Categories: Category[];
+  Products: Product[];
 }
 
 export interface Category {
@@ -29,11 +29,15 @@ export class ConfigService {
   constructor(private http: HttpClient) { }
 
   getConfig() {
+    console.log('--getConfig--')
+
     return this.http.get<Config>(this.configUrl)
       .pipe(
         retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error
       );
+
+
   }
 
   getConfig_1() {
