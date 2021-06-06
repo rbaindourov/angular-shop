@@ -9,15 +9,18 @@ import { Config, ConfigService } from './config';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  config: Config | undefined;
+  config?: Config;
   error: any;
 
   constructor(private configService: ConfigService) {
-    this.configService.getConfig()
-      .subscribe(
-        (data: Config) => this.config = { ...data }, // success path
-        error => this.error = error // error path
-      );
   }
+  ngOnInt(){
+    this.configService.getConfig()
+    .subscribe(
+      (data: Config) => this.config = { ...data }, // success path
+      error => this.error = error // error path
+    );
+  }
+  
   title = 'AStoreForBeauty.com';
 }
