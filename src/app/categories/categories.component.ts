@@ -13,9 +13,7 @@ export class CategoriesComponent implements OnInit,OnChanges {
     name: 'Windstorm'
   }];
 
-  constructor() { 
-
-  }
+  constructor() {}
 
   ngOnInit(): void {
     console.log("------ngOnInit-----")
