@@ -1,10 +1,113 @@
-<header>
-    <h1>{{title}}</h1>
-</header>
-<main>
-    <app-categories [categories]="config?.Categories"></app-categories>
-</main>
-<footer>
-Copyright WinWinHost, Inc. 
-</footer>
-<router-outlet></router-outlet>
+<div class="app-container" id="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo-section" style="cursor: pointer;" routerLink="/">
+      <h1>AStore For Beauty</h1>
+      <p>Luxurious Storefront</p>
+    </div>
+    <div class="categories-nav">
+      <h3>Categories</h3>
+      <div id="categories-container">
+        <!-- We use the app-categories component here -->
+        <app-categories [categories]="config?.Categories"></app-categories>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Area -->
+  <main class="main-content">
+    
+    <!-- Top bar -->
+    <div class="top-bar">
+      <button class="mobile-menu-toggle" id="menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" placeholder="Search jewelry, cosmetics, accessories..." />
+      </div>
+      <button class="cart-trigger-btn" id="cart-trigger">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span>Cart</span>
+        <span class="cart-count-badge" id="cart-badge">0</span>
+      </button>
+    </div>
+
+
+
+    <router-outlet></router-outlet>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>&copy; 2026 AStoreForBeauty.com. All rights reserved.</p>
+      <p>Powered by <a href="https://winwinhost.com" target="_blank" rel="noopener">WinWinHost</a> Technology</p>
+    </footer>
+  </main>
+
+  <!-- Cart Drawer -->
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>Your Bag</h3>
+      <button class="close-cart-btn" id="close-cart">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="cart-items-list" id="cart-items-container">
+      <div class="empty-cart-view">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <p>Your shopping bag is empty.</p>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cart-total">$0.00</span>
+      </div>
+      <button class="checkout-btn" id="checkout-trigger">
+        <span>Proceed to Checkout</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal" id="checkout-modal">
+    <div class="modal-header">
+      <h3>Complete Your Order</h3>
+      <button class="close-cart-btn" id="close-modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <form id="checkout-form" onsubmit="event.preventDefault();">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="cust-name" required placeholder="Jane Doe" />
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="cust-email" required placeholder="jane@example.com" />
+      </div>
+      <div class="form-group">
+        <label for="address">Shipping Address</label>
+        <textarea id="cust-address" rows="3" required placeholder="123 Beauty Lane, Glamour City, NY 10001"></textarea>
+      </div>
+      <button type="submit" class="checkout-btn" style="margin-top: 1rem;">
+        <span>Submit Order</span>
+        <i class="fa-solid fa-check"></i>
+      </button>
+    </form>
+    <div id="checkout-success" class="success-view" style="display: none;">
+      <i class="fa-solid fa-circle-check"></i>
+      <h4>Order Successful!</h4>
+      <p style="margin-top: 0.5rem;">Thank you for shopping with AStore For Beauty. A confirmation email and shipping details will be sent to you shortly.</p>
+      <button class="checkout-btn" style="margin-top: 1.5rem;">
+        <span>Continue Shopping</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+</div>
+

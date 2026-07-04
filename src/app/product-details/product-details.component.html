@@ -1,0 +1,49 @@
+<div class="product-details-container" style="padding: 2rem; max-width: 1200px; margin: 0 auto; min-height: 500px;">
+  
+  <!-- Back button -->
+  <div style="margin-bottom: 2rem;">
+    <a routerLink="/" style="color: var(--primary-color); text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem;">
+      <i class="fa-solid fa-arrow-left"></i> Back to Products
+    </a>
+  </div>
+
+  <div *ngIf="loading" style="text-align: center; color: var(--text-secondary); padding: 3rem;">
+    Loading product details...
+  </div>
+
+  <div *ngIf="!loading && !product" style="text-align: center; color: var(--text-secondary); padding: 3rem;">
+    Product not found.
+  </div>
+
+  <div *ngIf="product" class="product-details-content" style="display: flex; gap: 3rem; flex-wrap: wrap;">
+    <!-- Product Image -->
+    <div class="product-image-container" style="flex: 1 1 400px;">
+      <img [src]="product.image || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop'" 
+           [alt]="product.name" 
+           style="width: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); object-fit: cover;" />
+    </div>
+
+    <!-- Product Info -->
+    <div class="product-info-container" style="flex: 1 1 400px; display: flex; flex-direction: column; gap: 1.5rem;">
+      <h2 style="font-size: 2.5rem; color: var(--text-primary); margin: 0;">{{product.name}}</h2>
+      
+      <div class="price-section" style="font-size: 1.75rem; font-weight: 600; color: var(--primary-color);">
+        ${{product.price}}
+      </div>
+      
+      <div class="actions-section" style="padding: 1.5rem 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+        <button class="add-to-cart-btn" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+          <i class="fa-solid fa-bag-shopping"></i> Add to Bag
+        </button>
+      </div>
+
+      <div class="description-section">
+        <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">Product Details</h3>
+        <div [innerHTML]="product.description || 'Premium catalog product crafted with high quality standards.'" 
+             style="line-height: 1.6; color: var(--text-secondary);">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

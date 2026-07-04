@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Config, ConfigService } from './config';
 
 
@@ -6,13 +6,14 @@ import { Config, ConfigService } from './config';
   selector: 'app-root',
   templateUrl: './app.component.html',
   providers: [ ConfigService ],
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
   config?: Config;
   error: any;
 
-  constructor(private configService: ConfigService) {
+  constructor(private configService: ConfigService, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit(){
@@ -21,9 +22,13 @@ export class AppComponent implements OnInit {
       (data: Config) => {
         console.log("--getConfig--")
         console.log(data)
-        this.config = { ...data }
+        this.config = { ...data };
+        this.cdr.markForCheck();
       }, 
-      error => this.error = error // error path
+      error => {
+        this.error = error;
+        this.cdr.markForCheck();
+      }
     );
   }
   

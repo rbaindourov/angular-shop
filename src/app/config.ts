@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, retry, shareReplay } from 'rxjs/operators';
 
 export interface Config {
   Categories: Category[];
@@ -11,14 +11,21 @@ export interface Config {
 }
 
 export interface Category {
-  id: number;
+  id: string | number;
   name: string;
 }
 
 export interface Product {
-  id: number;
+  id: string;
+  productID?: string;
   name: string;
-  price: number;
+  price: number | string;
+  cost?: number | string;
+  description?: string;
+  cat?: string;
+  image?: string;
+  large?: string;
+  thumb?: string;
 }
 
 
@@ -28,16 +35,19 @@ export class ConfigService {
 
   constructor(private http: HttpClient) { }
 
+  private cache$?: Observable<Config>;
+
   getConfig() {
     console.log('--getConfig--')
-
-    return this.http.get<Config>(this.configUrl)
-      .pipe(
-        retry(3), // retry a failed request up to 3 times
-        catchError(this.handleError) // then handle the error
-      );
-
-
+    if (!this.cache$) {
+      this.cache$ = this.http.get<Config>(this.configUrl)
+        .pipe(
+          retry(3), // retry a failed request up to 3 times
+          catchError(this.handleError), // then handle the error
+          shareReplay(1)
+        );
+    }
+    return this.cache$;
   }
 
   getConfig_1() {
