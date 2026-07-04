@@ -52,6 +52,7 @@
       <div class="product-detail-description">
         <h3>Product Details</h3>
         <div [innerHTML]="product.description || 'Premium catalog product crafted with high quality standards.'" 
+             (click)="onDescriptionClick($event)"
              class="description-html">
         </div>
       </div>

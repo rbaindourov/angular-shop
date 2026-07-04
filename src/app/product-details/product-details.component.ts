@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService, Product } from '../config';
 
 @Component({
@@ -16,12 +16,22 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private configService: ConfigService,
     private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      this.loadProduct(id);
+    });
+  }
+
+  loadProduct(id: string | null): void {
+    this.loading = true;
+    this.cdr.markForCheck();
+    
     this.configService.getConfig().subscribe(data => {
       if (data && data.Products) {
         this.product = data.Products.find(p => p.id === id || String(p.productID) === String(id));
@@ -57,6 +67,22 @@ export class ProductDetailsComponent implements OnInit {
         (window as any).addToCart(this.product.productID);
       } else {
         console.error('addToCart is not defined globally on window');
+      }
+    }
+  }
+
+  onDescriptionClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    const anchor = target.closest('a');
+    if (anchor) {
+      const href = anchor.getAttribute('href');
+      if (href) {
+        const match = href.match(/product_detail\.php\?id=(\d+)/);
+        if (match) {
+          event.preventDefault();
+          const productId = match[1];
+          this.router.navigate(['/product', productId]);
+        }
       }
     }
   }
