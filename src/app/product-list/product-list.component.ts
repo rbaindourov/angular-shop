@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Config, ConfigService } from '../config';
+import { ActivatedRoute } from '@angular/router';
+import { Config, ConfigService, Product } from '../config';
 
 @Component({
   selector: 'app-product-list',
@@ -9,14 +10,62 @@ import { Config, ConfigService } from '../config';
 })
 export class ProductListComponent implements OnInit {
   config?: Config;
+  filteredProducts: Product[] = [];
+  activeCategoryName: string = 'Timeless Luxury & Style';
+  activeCategoryDesc: string = 'Discover our curated collection of handcrafted sterling silver, fashion accessories, and premium skincare products.';
 
-  constructor(private configService: ConfigService, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private configService: ConfigService, 
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.configService.getConfig().subscribe(data => {
       this.config = data;
-      this.cdr.markForCheck();
+      this.filterProducts();
+    });
+
+    this.route.queryParams.subscribe(() => {
+      this.filterProducts();
     });
   }
 
+  filterProducts(): void {
+    if (!this.config) return;
+
+    const catId = this.route.snapshot.queryParams['category'];
+    const search = this.route.snapshot.queryParams['search'];
+    
+    let list = this.config.Products || [];
+
+    // 1. Filter by Category
+    if (catId) {
+      list = list.filter(p => String(p.cat) === String(catId));
+      const category = this.config.Categories.find(c => String(c.id) === String(catId));
+      if (category) {
+        this.activeCategoryName = category.name;
+        this.activeCategoryDesc = `Browse our exclusive select range of premium ${category.name.toLowerCase()} products selected just for you.`;
+      }
+    } else {
+      this.activeCategoryName = 'Timeless Luxury & Style';
+      this.activeCategoryDesc = 'Discover our curated collection of handcrafted sterling silver, fashion accessories, and premium skincare products.';
+    }
+
+    // 2. Filter by Search Query
+    if (search && String(search).trim() !== '') {
+      const q = String(search).toLowerCase();
+      list = list.filter(p => 
+        (p.name && p.name.toLowerCase().includes(q)) || 
+        (p.description && p.description.toLowerCase().includes(q))
+      );
+      if (!catId) {
+        this.activeCategoryName = `Search Results: "${search}"`;
+        this.activeCategoryDesc = `Found ${list.length} products matching your keywords.`;
+      }
+    }
+
+    this.filteredProducts = list;
+    this.cdr.markForCheck();
+  }
 }

@@ -1,16 +1,16 @@
     <!-- Hero Banner -->
     <div class="hero-banner" id="hero">
-      <h2 id="hero-title">Timeless Luxury & Style</h2>
-      <p id="hero-desc">Discover our curated collection of handcrafted sterling silver, fashion accessories, and premium skincare products.</p>
+      <h2 id="hero-title">{{activeCategoryName}}</h2>
+      <p id="hero-desc">{{activeCategoryDesc}}</p>
     </div>
 
     <!-- Products Container -->
     <div class="products-grid" id="products-container">
-      <div *ngIf="!config?.Products || config?.Products?.length === 0" style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 3rem;">
-        Loading products...
+      <div *ngIf="!filteredProducts || filteredProducts.length === 0" style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 3rem;">
+        No products found or loading...
       </div>
       
-      <div class="product-card" *ngFor="let prod of config?.Products" style="cursor: pointer;" [routerLink]="['/product', prod.id]">
+      <div class="product-card" *ngFor="let prod of filteredProducts" style="cursor: pointer;" [routerLink]="['/product', prod.id]">
         <div class="product-image">
           <!-- Fallback or actual image -->
           <img [src]="prod.image || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500&auto=format&fit=crop'" [alt]="prod.name" loading="lazy" />

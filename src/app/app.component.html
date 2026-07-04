@@ -24,7 +24,7 @@
       </button>
       <div class="search-box">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" placeholder="Search jewelry, cosmetics, accessories..." />
+        <input type="text" id="search-input" placeholder="Search jewelry, cosmetics, accessories..." [value]="searchQuery" (input)="onSearch($event)" />
       </div>
       <button class="cart-trigger-btn" id="cart-trigger">
         <i class="fa-solid fa-bag-shopping"></i>
