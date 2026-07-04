@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry, shareReplay } from 'rxjs/operators';
+import { catchError, retry, shareReplay, map } from 'rxjs/operators';
 
 export interface Config {
   Categories: Category[];
@@ -43,6 +43,28 @@ export class ConfigService {
       this.cache$ = this.http.get<Config>(this.configUrl)
         .pipe(
           retry(3), // retry a failed request up to 3 times
+          map(config => {
+            if (config && config.Products) {
+              config.Products = config.Products.map(p => {
+                if (p.image && !p.image.startsWith('/') && !p.image.startsWith('http')) {
+                  p.image = '/' + p.image;
+                }
+                if (p.large) {
+                  p.large = p.large.split('@').map(img => {
+                    if (img && !img.startsWith('/') && !img.startsWith('http')) {
+                      return '/' + img;
+                    }
+                    return img;
+                  }).join('@');
+                }
+                if (p.thumb && !p.thumb.startsWith('/') && !p.thumb.startsWith('http')) {
+                  p.thumb = '/' + p.thumb;
+                }
+                return p;
+              });
+            }
+            return config;
+          }),
           catchError(this.handleError), // then handle the error
           shareReplay(1)
         );
@@ -88,6 +110,8 @@ export class ConfigService {
   }
 
   makeIntentionalError() {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return this.http.get('not/a/real/url')
       .pipe(
         catchError(this.handleError)
@@ -95,6 +119,3 @@ export class ConfigService {
   }
 
 }
-
-
-
