@@ -26,6 +26,12 @@ export class ProductListComponent implements OnInit {
       this.filterProducts();
     });
 
+    // Listen to parameter changes (category slug)
+    this.route.paramMap.subscribe(() => {
+      this.filterProducts();
+    });
+
+    // Listen to query parameters (search query)
     this.route.queryParams.subscribe(() => {
       this.filterProducts();
     });
@@ -34,16 +40,16 @@ export class ProductListComponent implements OnInit {
   filterProducts(): void {
     if (!this.config) return;
 
-    const catId = this.route.snapshot.queryParams['category'];
+    const slug = this.route.snapshot.paramMap.get('slug');
     const search = this.route.snapshot.queryParams['search'];
     
     let list = this.config.Products || [];
 
-    // 1. Filter by Category
-    if (catId) {
-      list = list.filter(p => String(p.cat) === String(catId));
-      const category = this.config.Categories.find(c => String(c.id) === String(catId));
+    // 1. Filter by Category Slug
+    if (slug) {
+      const category = this.config.Categories.find(c => String(c.slug) === String(slug) || String(c.id) === String(slug));
       if (category) {
+        list = list.filter(p => String(p.cat) === String(category.id));
         this.activeCategoryName = category.name;
         this.activeCategoryDesc = `Browse our exclusive select range of premium ${category.name.toLowerCase()} products selected just for you.`;
       }
@@ -59,7 +65,7 @@ export class ProductListComponent implements OnInit {
         (p.name && p.name.toLowerCase().includes(q)) || 
         (p.description && p.description.toLowerCase().includes(q))
       );
-      if (!catId) {
+      if (!slug) {
         this.activeCategoryName = `Search Results: "${search}"`;
         this.activeCategoryDesc = `Found ${list.length} products matching your keywords.`;
       }

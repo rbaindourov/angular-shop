@@ -13,6 +13,8 @@ export interface Config {
 export interface Category {
   id: string | number;
   name: string;
+  slug?: string;
+  urlrw?: string;
 }
 
 export interface Product {
@@ -44,24 +46,34 @@ export class ConfigService {
         .pipe(
           retry(3), // retry a failed request up to 3 times
           map(config => {
-            if (config && config.Products) {
-              config.Products = config.Products.map(p => {
-                if (p.image && !p.image.startsWith('/') && !p.image.startsWith('http')) {
-                  p.image = '/' + p.image;
-                }
-                if (p.large) {
-                  p.large = p.large.split('@').map(img => {
-                    if (img && !img.startsWith('/') && !img.startsWith('http')) {
-                      return '/' + img;
-                    }
-                    return img;
-                  }).join('@');
-                }
-                if (p.thumb && !p.thumb.startsWith('/') && !p.thumb.startsWith('http')) {
-                  p.thumb = '/' + p.thumb;
-                }
-                return p;
-              });
+            if (config) {
+              if (config.Categories) {
+                config.Categories = config.Categories.map(c => {
+                  if (!c.slug) {
+                    c.slug = c.urlrw || String(c.id);
+                  }
+                  return c;
+                });
+              }
+              if (config.Products) {
+                config.Products = config.Products.map(p => {
+                  if (p.image && !p.image.startsWith('/') && !p.image.startsWith('http')) {
+                    p.image = '/' + p.image;
+                  }
+                  if (p.large) {
+                    p.large = p.large.split('@').map(img => {
+                      if (img && !img.startsWith('/') && !img.startsWith('http')) {
+                        return '/' + img;
+                      }
+                      return img;
+                    }).join('@');
+                  }
+                  if (p.thumb && !p.thumb.startsWith('/') && !p.thumb.startsWith('http')) {
+                    p.thumb = '/' + p.thumb;
+                  }
+                  return p;
+                });
+              }
             }
             return config;
           }),

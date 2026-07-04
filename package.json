@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "NODE_OPTIONS=--openssl-legacy-provider ng",
     "start": "NODE_OPTIONS=--openssl-legacy-provider ng serve",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider ng build --base-href=/astoreforbeauty/angular-shop/",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider ng build --base-href=/",
     "watch": "NODE_OPTIONS=--openssl-legacy-provider ng build --watch --configuration development",
     "test": "NODE_OPTIONS=--openssl-legacy-provider ng test"
   },

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Category } from '../config';
 
@@ -10,13 +10,24 @@ import { Category } from '../config';
 export class CategoriesComponent implements OnInit, OnChanges {
   @Input() categories?: Category[] = [];
   sortedCategories: Category[] = [];
-  activeCategoryId?: string;
+  activeCategorySlug?: string;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router, 
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.activeCategoryId = params['category'];
+    this.router.events.subscribe(() => {
+      let active = this.route.root;
+      while (active.firstChild) {
+        active = active.firstChild;
+      }
+      active.paramMap.subscribe(params => {
+        this.activeCategorySlug = params.get('slug') || undefined;
+        this.cdr.markForCheck();
+      });
     });
   }
 
@@ -29,11 +40,5 @@ export class CategoriesComponent implements OnInit, OnChanges {
     } else {
       this.sortedCategories = [];
     }
-  }
-
-  selectCategory(catId: any): void {
-    const id = String(catId);
-    // Keep existing query params except search if they click a new category
-    this.router.navigate(['/'], { queryParams: { category: id }, queryParamsHandling: 'merge' });
   }
 }

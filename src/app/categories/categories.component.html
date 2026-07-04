@@ -1,6 +1,6 @@
-<button *ngFor="let category of sortedCategories" 
-        class="category-item"
-        [class.active]="category.id == activeCategoryId"
-        (click)="selectCategory(category.id)">
+<a *ngFor="let category of sortedCategories" 
+   class="category-item"
+   [class.active]="category.slug === activeCategorySlug"
+   [routerLink]="['/category', category.slug]">
   {{category.name}}
-</button>
+</a>
