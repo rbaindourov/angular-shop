@@ -11,6 +11,8 @@ import { ConfigService, Product } from '../config';
 export class ProductDetailsComponent implements OnInit {
   product?: Product;
   loading: boolean = true;
+  images: string[] = [];
+  activeImage: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +25,17 @@ export class ProductDetailsComponent implements OnInit {
     this.configService.getConfig().subscribe(data => {
       if (data && data.Products) {
         this.product = data.Products.find(p => p.id === id || String(p.productID) === String(id));
+        if (this.product) {
+          // Resolve images from large string
+          if (this.product.large) {
+            this.images = this.product.large.split('@');
+          } else if (this.product.image) {
+            this.images = [this.product.image];
+          } else {
+            this.images = [];
+          }
+          this.activeImage = this.images.length > 0 ? this.images[0] : '';
+        }
       }
       this.loading = false;
       this.cdr.markForCheck();
@@ -31,5 +44,20 @@ export class ProductDetailsComponent implements OnInit {
       console.error(error);
       this.cdr.markForCheck();
     });
+  }
+
+  selectImage(img: string): void {
+    this.activeImage = img;
+    this.cdr.markForCheck();
+  }
+
+  addToBag(): void {
+    if (this.product && this.product.productID) {
+      if ((window as any).addToCart) {
+        (window as any).addToCart(this.product.productID);
+      } else {
+        console.error('addToCart is not defined globally on window');
+      }
+    }
   }
 }

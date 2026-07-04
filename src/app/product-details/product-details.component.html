@@ -1,46 +1,58 @@
-<div class="product-details-container" style="padding: 2rem; max-width: 1200px; margin: 0 auto; min-height: 500px;">
+<div class="product-details-container">
   
   <!-- Back button -->
-  <div style="margin-bottom: 2rem;">
-    <a routerLink="/" style="color: var(--primary-color); text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem;">
+  <div class="back-link-wrapper">
+    <a routerLink="/" class="back-to-products-btn">
       <i class="fa-solid fa-arrow-left"></i> Back to Products
     </a>
   </div>
 
-  <div *ngIf="loading" style="text-align: center; color: var(--text-secondary); padding: 3rem;">
+  <div *ngIf="loading" class="loading-state">
     Loading product details...
   </div>
 
-  <div *ngIf="!loading && !product" style="text-align: center; color: var(--text-secondary); padding: 3rem;">
+  <div *ngIf="!loading && !product" class="not-found-state">
     Product not found.
   </div>
 
-  <div *ngIf="product" class="product-details-content" style="display: flex; gap: 3rem; flex-wrap: wrap;">
-    <!-- Product Image -->
-    <div class="product-image-container" style="flex: 1 1 400px;">
-      <img [src]="product.image || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop'" 
-           [alt]="product.name" 
-           style="width: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); object-fit: cover;" />
+  <div *ngIf="product" class="product-details-content">
+    <!-- Product Image & Gallery -->
+    <div class="gallery-column">
+      <div class="main-image-container">
+        <img [src]="activeImage || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop'" 
+             [alt]="product.name" 
+             class="main-product-image" />
+      </div>
+      
+      <!-- Thumbnails Gallery -->
+      <div *ngIf="images && images.length > 1" class="thumbnails-strip">
+        <div *ngFor="let img of images" 
+             (click)="selectImage(img)"
+             [class.active]="img === activeImage"
+             class="thumbnail-wrapper">
+          <img [src]="img" [alt]="product.name" />
+        </div>
+      </div>
     </div>
 
     <!-- Product Info -->
-    <div class="product-info-container" style="flex: 1 1 400px; display: flex; flex-direction: column; gap: 1.5rem;">
-      <h2 style="font-size: 2.5rem; color: var(--text-primary); margin: 0;">{{product.name}}</h2>
+    <div class="info-column">
+      <h2 class="product-name-title">{{product.name}}</h2>
       
-      <div class="price-section" style="font-size: 1.75rem; font-weight: 600; color: var(--primary-color);">
+      <div class="product-detail-price">
         ${{product.price}}
       </div>
       
-      <div class="actions-section" style="padding: 1.5rem 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
-        <button class="add-to-cart-btn" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+      <div class="product-detail-actions">
+        <button class="add-to-cart-btn" (click)="addToBag()">
           <i class="fa-solid fa-bag-shopping"></i> Add to Bag
         </button>
       </div>
 
-      <div class="description-section">
-        <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">Product Details</h3>
+      <div class="product-detail-description">
+        <h3>Product Details</h3>
         <div [innerHTML]="product.description || 'Premium catalog product crafted with high quality standards.'" 
-             style="line-height: 1.6; color: var(--text-secondary);">
+             class="description-html">
         </div>
       </div>
     </div>
