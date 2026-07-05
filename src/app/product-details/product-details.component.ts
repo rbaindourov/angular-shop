@@ -77,11 +77,30 @@ export class ProductDetailsComponent implements OnInit {
     if (anchor) {
       const href = anchor.getAttribute('href');
       if (href) {
-        const match = href.match(/product_detail\.php\?id=(\d+)/);
-        if (match) {
+        // 1. Intercept legacy product links
+        const prodMatch = href.match(/product_detail\.php\?id=(\d+)/);
+        if (prodMatch) {
           event.preventDefault();
-          const productId = match[1];
+          const productId = prodMatch[1];
           this.router.navigate(['/product', productId]);
+          return;
+        }
+
+        // 2. Intercept legacy category links
+        const catMatch = href.match(/products\.php\?cat=(\d+)/);
+        if (catMatch) {
+          event.preventDefault();
+          const catId = catMatch[1];
+          this.configService.getConfig().subscribe(config => {
+            if (config && config.Categories) {
+              const category = config.Categories.find(c => String(c.id) === String(catId));
+              if (category && category.slug) {
+                this.router.navigate(['/category', category.slug]);
+              } else {
+                this.router.navigate(['/category', catId]);
+              }
+            }
+          });
         }
       }
     }
