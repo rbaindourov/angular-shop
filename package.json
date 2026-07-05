@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "NODE_OPTIONS=--openssl-legacy-provider ng",
     "start": "NODE_OPTIONS=--openssl-legacy-provider ng serve",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider ng build --base-href=/",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider ng build --base-href=/ && node -e \"const fs = require('fs'); let html = fs.readFileSync('dist/angular-shop/index.html', 'utf8'); html = html.replace(/(href|src)=\\\"([^/h][^\\\"]+)\\\"/g, '\\$1=\\\"/\\$2\\\"'); fs.writeFileSync('dist/angular-shop/index.html', html);\"",
     "watch": "NODE_OPTIONS=--openssl-legacy-provider ng build --watch --configuration development",
     "test": "NODE_OPTIONS=--openssl-legacy-provider ng test"
   },
