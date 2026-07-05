@@ -1,15 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
 :root {
-  --bg-gradient: linear-gradient(135deg, #090615 0%, #120e25 100%);
-  --panel-bg: rgba(20, 16, 38, 0.7);
-  --panel-border: rgba(255, 255, 255, 0.08);
+  --bg-gradient: linear-gradient(135deg, #2a0a4a 0%, #15002b 100%);
+  --panel-bg: rgba(42, 10, 74, 0.7);
+  --panel-border: rgba(255, 255, 255, 0.1);
   --text-primary: #ffffff;
-  --text-secondary: #a0aec0;
-  --accent-color: #d4af37; /* Premium Gold */
-  --accent-hover: #f3cf59;
-  --accent-glow: rgba(212, 175, 55, 0.3);
-  --card-bg: rgba(30, 25, 55, 0.4);
+  --text-secondary: #e0d4f0;
+  --accent-color: #ff6b00; /* Bright Orange */
+  --accent-hover: #ff8533;
+  --accent-glow: rgba(255, 107, 0, 0.4);
+  --card-bg: rgba(42, 10, 74, 0.4);
   --card-border: rgba(255, 255, 255, 0.05);
   --danger: #e53e3e;
   --success: #38a169;
@@ -22,6 +22,10 @@
   font-family: 'Montserrat', sans-serif;
   scrollbar-width: thin;
   scrollbar-color: var(--accent-color) var(--panel-bg);
+}
+
+a {
+  text-decoration: none !important;
 }
 
 /* Custom Scrollbar */
