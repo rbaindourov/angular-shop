@@ -34,7 +34,7 @@ export class ProductDetailsComponent implements OnInit {
     
     this.configService.getConfig().subscribe(data => {
       if (data && data.Products) {
-        this.product = data.Products.find(p => p.id === id || String(p.productID) === String(id));
+        this.product = data.Products.find(p => (p.slug && p.slug === id) || p.id === id || String(p.productID) === String(id));
         if (this.product) {
           // Resolve images from large string
           if (this.product.large) {

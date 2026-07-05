@@ -28,6 +28,7 @@ export interface Product {
   image?: string;
   large?: string;
   thumb?: string;
+  slug?: string;
 }
 
 

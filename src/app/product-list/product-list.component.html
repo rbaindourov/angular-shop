@@ -10,7 +10,7 @@
         No products found or loading...
       </div>
       
-      <div class="product-card" *ngFor="let prod of filteredProducts" style="cursor: pointer;" [routerLink]="['/product', prod.id]">
+      <div class="product-card" *ngFor="let prod of filteredProducts" style="cursor: pointer;" [routerLink]="['/product', prod.slug || prod.id]">
         <div class="product-image">
           <!-- Fallback or actual image -->
           <img [src]="prod.image || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500&auto=format&fit=crop'" [alt]="prod.name" loading="lazy" />
