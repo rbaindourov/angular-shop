@@ -19,7 +19,7 @@
           <h4 class="product-title" [title]="prod.name">{{prod.name}}</h4>
           <div class="product-price">${{prod.price}}</div>
           <div class="product-desc" [innerHTML]="prod.description || 'Premium catalog product crafted with high quality standards.'"></div>
-          <button class="add-to-cart-btn" (click)="$event.stopPropagation();">
+          <button class="add-to-cart-btn" (click)="$event.stopPropagation(); addToBag(prod)">
             <i class="fa-solid fa-plus"></i>
             <span>Add to Bag</span>
           </button>

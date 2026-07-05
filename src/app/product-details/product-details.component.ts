@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService, Product } from '../config';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-product-details',
@@ -18,6 +19,7 @@ export class ProductDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private configService: ConfigService,
+    private cartService: CartService,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -62,12 +64,8 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addToBag(): void {
-    if (this.product && this.product.productID) {
-      if ((window as any).addToCart) {
-        (window as any).addToCart(this.product.productID);
-      } else {
-        console.error('addToCart is not defined globally on window');
-      }
+    if (this.product) {
+      this.cartService.addToCart(this.product);
     }
   }
 
@@ -82,7 +80,16 @@ export class ProductDetailsComponent implements OnInit {
         if (prodMatch) {
           event.preventDefault();
           const productId = prodMatch[1];
-          this.router.navigate(['/product', productId]);
+          this.configService.getConfig().subscribe(config => {
+            if (config && config.Products) {
+              const prod = config.Products.find(p => String(p.productID) === String(productId));
+              if (prod && prod.slug) {
+                this.router.navigate(['/product', prod.slug]);
+              } else {
+                this.router.navigate(['/product', productId]);
+              }
+            }
+          });
           return;
         }
 

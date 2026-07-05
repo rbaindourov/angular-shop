@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Config, ConfigService, Product } from '../config';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -16,6 +17,7 @@ export class ProductListComponent implements OnInit {
 
   constructor(
     private configService: ConfigService, 
+    private cartService: CartService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {}
@@ -62,8 +64,8 @@ export class ProductListComponent implements OnInit {
     if (search && String(search).trim() !== '') {
       const q = String(search).toLowerCase();
       list = list.filter(p => 
-        (p.name && p.name.toLowerCase().includes(q)) || 
-        (p.description && p.description.toLowerCase().includes(q))
+          (p.name && p.name.toLowerCase().includes(q)) || 
+          (p.description && p.description.toLowerCase().includes(q))
       );
       if (!slug) {
         this.activeCategoryName = `Search Results: "${search}"`;
@@ -73,5 +75,9 @@ export class ProductListComponent implements OnInit {
 
     this.filteredProducts = list;
     this.cdr.markForCheck();
+  }
+
+  addToBag(product: Product): void {
+    this.cartService.addToCart(product);
   }
 }

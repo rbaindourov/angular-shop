@@ -1,6 +1,6 @@
 <div class="app-container" id="app">
   <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
+  <aside class="sidebar" [class.open]="isSidebarOpen" id="sidebar">
     <div class="logo-section" style="cursor: pointer;" routerLink="/">
       <h1>AStore For Beauty</h1>
       <p>Luxurious Storefront</p>
@@ -19,21 +19,19 @@
     
     <!-- Top bar -->
     <div class="top-bar">
-      <button class="mobile-menu-toggle" id="menu-toggle">
+      <button class="mobile-menu-toggle" id="menu-toggle" (click)="toggleSidebar()">
         <i class="fa-solid fa-bars"></i>
       </button>
       <div class="search-box">
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" id="search-input" placeholder="Search jewelry, cosmetics, accessories..." [value]="searchQuery" (input)="onSearch($event)" />
       </div>
-      <button class="cart-trigger-btn" id="cart-trigger">
+      <button class="cart-trigger-btn" id="cart-trigger" (click)="openCart()">
         <i class="fa-solid fa-bag-shopping"></i>
         <span>Cart</span>
-        <span class="cart-count-badge" id="cart-badge">0</span>
+        <span class="cart-count-badge" id="cart-badge">{{totalCount}}</span>
       </button>
     </div>
-
-
 
     <router-outlet></router-outlet>
 
@@ -45,25 +43,48 @@
   </main>
 
   <!-- Cart Drawer -->
-  <div class="cart-drawer" id="cart-drawer">
+  <div class="cart-drawer" [class.open]="isCartOpen" id="cart-drawer">
     <div class="cart-header">
       <h3>Your Bag</h3>
-      <button class="close-cart-btn" id="close-cart">
+      <button class="close-cart-btn" id="close-cart" (click)="closeCart()">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
     <div class="cart-items-list" id="cart-items-container">
-      <div class="empty-cart-view">
+      <div *ngIf="cartItems.length === 0" class="empty-cart-view">
         <i class="fa-solid fa-bag-shopping"></i>
         <p>Your shopping bag is empty.</p>
       </div>
+
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <div class="cart-item-img">
+          <img [src]="item.product.image || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500&auto=format&fit=crop'" [alt]="item.product.name" />
+        </div>
+        <div class="cart-item-info">
+          <div class="cart-item-title" [title]="item.product.name">{{item.product.name}}</div>
+          <div class="cart-item-price">${{item.product.price}}</div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" (click)="updateQty(item.product.productID, -1)">
+              <i class="fa-solid fa-minus"></i>
+            </button>
+            <span class="qty-val">{{item.quantity}}</span>
+            <button class="qty-btn" (click)="updateQty(item.product.productID, 1)">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <button class="remove-item-btn" (click)="removeFromCart(item.product.productID)" title="Remove Item">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      </div>
     </div>
+    
     <div class="cart-footer">
       <div class="cart-total-row">
         <span>Total</span>
-        <span id="cart-total">$0.00</span>
+        <span id="cart-total">${{totalAmount | number:'1.2-2'}}</span>
       </div>
-      <button class="checkout-btn" id="checkout-trigger">
+      <button class="checkout-btn" id="checkout-trigger" (click)="openCheckout()">
         <span>Proceed to Checkout</span>
         <i class="fa-solid fa-arrow-right"></i>
       </button>
@@ -71,24 +92,24 @@
   </div>
 
   <!-- Checkout Modal -->
-  <div class="modal" id="checkout-modal">
+  <div class="modal" [class.open]="isCheckoutOpen || isSuccessOpen" id="checkout-modal">
     <div class="modal-header">
       <h3>Complete Your Order</h3>
-      <button class="close-cart-btn" id="close-modal">
+      <button class="close-cart-btn" id="close-modal" (click)="closeCheckout()">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
-    <form id="checkout-form" onsubmit="event.preventDefault();">
+    <form id="checkout-form" (submit)="submitOrder($event)" *ngIf="isCheckoutOpen && !isSuccessOpen">
       <div class="form-group">
-        <label for="name">Full Name</label>
+        <label for="cust-name">Full Name</label>
         <input type="text" id="cust-name" required placeholder="Jane Doe" />
       </div>
       <div class="form-group">
-        <label for="email">Email Address</label>
+        <label for="cust-email">Email Address</label>
         <input type="email" id="cust-email" required placeholder="jane@example.com" />
       </div>
       <div class="form-group">
-        <label for="address">Shipping Address</label>
+        <label for="cust-address">Shipping Address</label>
         <textarea id="cust-address" rows="3" required placeholder="123 Beauty Lane, Glamour City, NY 10001"></textarea>
       </div>
       <button type="submit" class="checkout-btn" style="margin-top: 1rem;">
@@ -96,18 +117,17 @@
         <i class="fa-solid fa-check"></i>
       </button>
     </form>
-    <div id="checkout-success" class="success-view" style="display: none;">
+    <div id="checkout-success" class="success-view" *ngIf="isSuccessOpen">
       <i class="fa-solid fa-circle-check"></i>
       <h4>Order Successful!</h4>
       <p style="margin-top: 0.5rem;">Thank you for shopping with AStore For Beauty. A confirmation email and shipping details will be sent to you shortly.</p>
-      <button class="checkout-btn" style="margin-top: 1.5rem;">
+      <button class="checkout-btn" style="margin-top: 1.5rem;" (click)="closeSuccess()">
         <span>Continue Shopping</span>
       </button>
     </div>
   </div>
 
   <!-- Overlay -->
-  <div class="overlay" id="overlay"></div>
+  <div class="overlay" [class.open]="isCartOpen || isCheckoutOpen || isSuccessOpen" id="overlay" (click)="closeAll()"></div>
 
 </div>
-
