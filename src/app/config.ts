@@ -33,7 +33,7 @@ export interface Product {
 
 @Injectable()
 export class ConfigService {
-  configUrl = 'assets/config.json';
+  configUrl = '/api/config.json';
 
   constructor(private http: HttpClient) { }
 
@@ -57,6 +57,9 @@ export class ConfigService {
               }
               if (config.Products) {
                 config.Products = config.Products.map(p => {
+                  if (!p.image && p.large) {
+                    p.image = p.large.split('@')[0];
+                  }
                   if (p.image && !p.image.startsWith('/') && !p.image.startsWith('http')) {
                     p.image = '/' + p.image;
                   }
