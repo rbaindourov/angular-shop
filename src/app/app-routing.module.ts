@@ -6,7 +6,9 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
 const routes: Routes = [
   { path: '', component: ProductListComponent },
   { path: 'category/:slug', component: ProductListComponent },
+  { path: 'category-:slug', component: ProductListComponent },
   { path: 'product/:id', component: ProductDetailsComponent },
+  { path: 'product-:id', component: ProductDetailsComponent },
   { path: '**', redirectTo: '' }
 ];
 
