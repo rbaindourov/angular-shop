@@ -8,12 +8,17 @@ import { CategoriesComponent } from './categories/categories.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 
+import { FormsModule } from '@angular/forms';
+import { AccountComponent } from './account/account.component';
+
 @NgModule({ declarations: [
         AppComponent,
         CategoriesComponent,
         ProductListComponent,
-        ProductDetailsComponent
+        ProductDetailsComponent,
+        AccountComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
+        FormsModule,
         AppRoutingModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
