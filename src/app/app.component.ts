@@ -150,6 +150,36 @@ export class AppComponent implements OnInit, OnDestroy {
 
   submitOrder(event: Event): void {
     event.preventDefault();
+    const formEl = event.target as HTMLFormElement;
+    const formData = formEl ? new FormData(formEl) : null;
+
+    const orderPayload = {
+      domain: 'astoreforbeauty.com',
+      name: formData ? (formData.get('name') || formData.get('fullName') || '') : '',
+      email: formData ? (formData.get('email') || '') : '',
+      phone: formData ? (formData.get('phone') || '') : '',
+      address: formData ? (formData.get('address') || '') : '',
+      city: formData ? (formData.get('city') || '') : '',
+      zip: formData ? (formData.get('zip') || '') : '',
+      items: this.cartItems.map(item => ({
+        productID: item.product.productID || item.product.id,
+        title: item.product.name,
+        price: item.product.price,
+        quantity: item.quantity
+      })),
+      totalAmount: this.totalAmount
+    };
+
+    try {
+      fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderPayload)
+      }).catch(err => console.error('Error dispatching order to backend:', err));
+    } catch (e) {
+      console.error('Fetch error:', e);
+    }
+
     this.cartService.clearCart();
     this.cartService.openSuccess();
   }
