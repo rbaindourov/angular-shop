@@ -9,7 +9,7 @@
       <h3>Categories</h3>
       <div id="categories-container">
         <!-- We use the app-categories component here -->
-        <app-categories [categories]="config?.Categories"></app-categories>
+        <app-categories [categories]="config?.Categories" [products]="config?.Products"></app-categories>
       </div>
     </div>
   </aside>
@@ -102,15 +102,15 @@
     <form id="checkout-form" (submit)="submitOrder($event)" *ngIf="isCheckoutOpen && !isSuccessOpen">
       <div class="form-group">
         <label for="cust-name">Full Name</label>
-        <input type="text" id="cust-name" required placeholder="Jane Doe" />
+        <input type="text" id="cust-name" name="name" required placeholder="Jane Doe" />
       </div>
       <div class="form-group">
         <label for="cust-email">Email Address</label>
-        <input type="email" id="cust-email" required placeholder="jane@example.com" />
+        <input type="email" id="cust-email" name="email" required placeholder="jane@example.com" />
       </div>
       <div class="form-group">
         <label for="cust-address">Shipping Address</label>
-        <textarea id="cust-address" rows="3" required placeholder="123 Beauty Lane, Glamour City, NY 10001"></textarea>
+        <textarea id="cust-address" name="address" rows="3" required placeholder="123 Beauty Lane, Glamour City, NY 10001"></textarea>
       </div>
       <button type="submit" class="checkout-btn" style="margin-top: 1rem;">
         <span>Submit Order</span>

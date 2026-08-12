@@ -1,6 +1,26 @@
-<a *ngFor="let category of sortedCategories" 
-   class="category-item"
-   [class.active]="category.slug === activeCategorySlug"
-   [routerLink]="['/category', category.slug]">
-  {{category.name}}
-</a>
+<div class="categories-list" style="display: flex; flex-direction: column; gap: 0.8rem;">
+  <!-- Grouped categories -->
+  <div *ngFor="let group of groupedCategories" class="category-group" style="margin-bottom: 0.5rem;">
+    <div class="category-group-header" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-primary); margin-bottom: 0.4rem; font-weight: 600; padding: 0.25rem 0.5rem; border-left: 2px solid var(--accent-color);">
+      {{group.parent.name}}
+    </div>
+    <div class="category-group-links" style="padding-left: 0.75rem; display: flex; flex-direction: column; gap: 0.2rem;">
+      <a *ngFor="let child of group.children"
+         class="category-item"
+         [class.active]="child.slug === activeCategorySlug"
+         [routerLink]="['/category', child.slug]"
+         style="font-size: 0.85rem; padding: 0.4rem 0.6rem; display: block; text-decoration: none; color: var(--text-secondary);">
+        {{child.name}}
+      </a>
+    </div>
+  </div>
+
+  <!-- Standalone categories -->
+  <a *ngFor="let category of standaloneCategories" 
+     class="category-item"
+     [class.active]="category.slug === activeCategorySlug"
+     [routerLink]="['/category', category.slug]"
+     style="font-weight: 600; display: block; text-decoration: none; color: var(--text-secondary);">
+    {{category.name}}
+  </a>
+</div>

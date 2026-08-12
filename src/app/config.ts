@@ -15,6 +15,7 @@ export interface Category {
   name: string;
   slug?: string;
   urlrw?: string;
+  parent_id?: number;
 }
 
 export interface Product {
