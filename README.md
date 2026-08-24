@@ -12,3 +12,9 @@ All active e-commerce features (Product Catalog, Category Filtering, Cart Drawer
 - **Views**: `/home/robert/projects/multipleDomainCMS/src/views/astoreforbeauty.com/`
 - **Routes**: `/home/robert/projects/multipleDomainCMS/src/routes/domains/astoreforbeauty.com.ts`
 - **Styles**: `/home/robert/projects/multipleDomainCMS/public/stylesheets/astoreforbeauty.com.css`
+
+---
+
+## 📖 Historical Documentation
+- **[End-to-End Storefront UX Flow & Visual Captures](docs/ux_flow.md)**: Visual milestone captures (7 screens), component mapping, API endpoints, and React MVC migration parity matrix.
+

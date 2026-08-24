@@ -35,7 +35,7 @@ export interface Product {
 
 @Injectable()
 export class ConfigService {
-  configUrl = '/api/config.json';
+  configUrl = '/assets/config.json';
 
   constructor(private http: HttpClient) { }
 
