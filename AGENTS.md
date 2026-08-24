@@ -1,8 +1,15 @@
-# Agent Instructions
+# Agent Instructions: Angular Shop (ARCHIVED)
 
-## AStoreForBeauty Storefront Workflow
-All modifications, enhancements, or bug fixes to the `astoreforbeauty.com` storefront MUST be made inside this `angular-shop` repository (`/home/robert/Documents/projects/angular-shop`).
+## ⚠️ Architectural Deprecation Notice
+`astoreforbeauty.com` and `astore4beauty.com` **NO LONGER USE ANGULAR OR THIS REPOSITORY**.
 
-Once the changes are completed and built, the compiled output artifacts (`dist/` folder) must be copied over into the `multiDomainCMS` project at `public/astoreforbeauty/angular-shop/`. 
+All storefront views, product catalogs, category filtering, cart & checkout modals, verified customer review modules, beauty bundles, and route handlers have been **fully migrated to Native React MVC architecture** inside `multiDomainCMS`:
+- **View Components**: `/home/robert/projects/multipleDomainCMS/src/views/astoreforbeauty.com/`
+- **Route Controller**: `/home/robert/projects/multipleDomainCMS/src/routes/domains/astoreforbeauty.com.ts`
 
-Do NOT make direct edits to the compiled storefront files within the `multiDomainCMS` project to prevent synchronization errors.
+---
+
+## 🚫 Workflow Invariants
+1. **Do NOT Make Edits in This Repository**: All active e-commerce storefront development for `astoreforbeauty.com` must be done directly within the `multiDomainCMS` repository.
+2. **Do NOT Copy Artifacts**: Agents must never run `ng build` here to copy artifacts into `multiDomainCMS/public/astoreforbeauty/angular-shop/`.
+3. **Historical Archive Only**: This codebase is retained strictly as an immutable historical reference.
